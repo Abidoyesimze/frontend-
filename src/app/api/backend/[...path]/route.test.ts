@@ -149,7 +149,10 @@ describe('proxy request shaping', () => {
     vi.mocked(fetch).mockResolvedValue(jsonResponse({ entries: [] }))
     const response = await invoke(route, '/v1/projects/1/history', { search: '?limit=5' })
     expect(response.status).toBe(200)
-    expect(fetch).toHaveBeenCalledWith(`${BACKEND}/v1/projects/1/history?limit=5`, expect.anything())
+    expect(fetch).toHaveBeenCalledWith(
+      `${BACKEND}/v1/projects/1/history?limit=5`,
+      expect.anything(),
+    )
   })
 
   it('drops query parameters outside the allowlist', async () => {

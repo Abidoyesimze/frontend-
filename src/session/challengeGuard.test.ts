@@ -1,4 +1,10 @@
-import { Account, Asset, Operation, TimeoutInfinite, TransactionBuilder } from '@stellar/stellar-sdk'
+import {
+  Account,
+  Asset,
+  Operation,
+  TimeoutInfinite,
+  TransactionBuilder,
+} from '@stellar/stellar-sdk'
 import { describe, expect, it } from 'vitest'
 import { NETWORK_PASSPHRASE } from '../config/network'
 import {
@@ -77,10 +83,7 @@ describe('assertValidTransactionChallenge', () => {
 
   it('rejects a challenge whose manageData is signed by the user', async () => {
     await expect(
-      assertValidTransactionChallenge(
-        buildChallenge({ operationSource: USER }),
-        USER,
-      ),
+      assertValidTransactionChallenge(buildChallenge({ operationSource: USER }), USER),
     ).rejects.toThrow()
   })
 
@@ -105,11 +108,7 @@ describe('assertValidTransactionChallenge', () => {
 
   it('rejects a foreign network passphrase', async () => {
     await expect(
-      assertValidTransactionChallenge(
-        buildChallenge(),
-        USER,
-        'Foreign Network ; November 2020',
-      ),
+      assertValidTransactionChallenge(buildChallenge(), USER, 'Foreign Network ; November 2020'),
     ).rejects.toThrow()
   })
 
@@ -120,9 +119,7 @@ describe('assertValidTransactionChallenge', () => {
 
 describe('assertValidMessageChallenge', () => {
   it('accepts a message that names the wallet', () => {
-    expect(() =>
-      assertValidMessageChallenge(`Sign in to Heliobond\n${USER}`, USER),
-    ).not.toThrow()
+    expect(() => assertValidMessageChallenge(`Sign in to Heliobond\n${USER}`, USER)).not.toThrow()
   })
 
   it('rejects a message that is not bound to the wallet', () => {

@@ -129,7 +129,7 @@ describe('quarterlyReportToCsv', () => {
     const events: InvestmentEvent[] = [
       {
         id: '1',
-        projectName: '=cmd|\' /C calc\'!A0',
+        projectName: "=cmd|' /C calc'!A0",
         date: '2025-01-10',
         type: 'deposit',
         amountUSD: 1000,

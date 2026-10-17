@@ -98,7 +98,8 @@ describe('SessionProvider', () => {
   it('signs in with a SEP-53 message signature and keeps the token out of storage', async () => {
     fetchMock.mockImplementation(async (url: string) => {
       if (url.endsWith('/auth/refresh')) return json({}, 401)
-      if (url.endsWith('/auth/challenge')) return json({ type: 'message', challenge: MESSAGE_CHALLENGE })
+      if (url.endsWith('/auth/challenge'))
+        return json({ type: 'message', challenge: MESSAGE_CHALLENGE })
       if (url.endsWith('/auth/verify')) return json({ token: 'jwt-1', expiresIn: 900 })
       if (url.endsWith('/me/watchlist')) return json([1, 2])
       return json({}, 404)
@@ -624,7 +625,7 @@ describe('SessionProvider', () => {
     expect(session.isAuthenticated).toBe(false)
   })
 
-  it("does not adopt a refresh token bound to a different wallet (#835)", async () => {
+  it('does not adopt a refresh token bound to a different wallet (#835)', async () => {
     const OTHER = 'GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN'
     fetchMock.mockImplementation(async (url: string, init?: RequestInit) => {
       if (url.endsWith('/auth/refresh')) {
@@ -656,9 +657,7 @@ describe('SessionProvider', () => {
     await waitFor(() => expect(session.address).toBe(OTHER))
     expect(session.isAuthenticated).toBe(true)
     expect(signMessage).toHaveBeenCalledWith(expect.stringContaining(OTHER))
-    const logoutCalls = fetchMock.mock.calls.filter((c) =>
-      String(c[0]).endsWith('/auth/logout'),
-    )
+    const logoutCalls = fetchMock.mock.calls.filter((c) => String(c[0]).endsWith('/auth/logout'))
     expect(logoutCalls.length).toBeGreaterThan(0)
   })
 
@@ -681,9 +680,7 @@ describe('SessionProvider', () => {
     act(() => walletMock.setAddress(null))
 
     await waitFor(() =>
-      expect(
-        fetchMock.mock.calls.some((c) => String(c[0]).endsWith('/auth/logout')),
-      ).toBe(true),
+      expect(fetchMock.mock.calls.some((c) => String(c[0]).endsWith('/auth/logout'))).toBe(true),
     )
     expect(session.isAuthenticated).toBe(false)
   })
